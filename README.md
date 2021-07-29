@@ -118,6 +118,7 @@ int main()
 
 
 ============================================
+```
 #include "multi_button.h"
 
 struct Button button1;
@@ -145,3 +146,5 @@ void main()
         }
     }
 }
+```
+![image](https://user-images.githubusercontent.com/7064806/127471830-cc6747f6-380e-4750-8237-5565ee9dbdd8.png)
