@@ -117,4 +117,31 @@ int main()
 }
 
 
+============================================
+#include "multi_button.h"
 
+struct Button button1;
+uint8_t read_button1_pin()
+{
+    return gpio_input_bit_get(GPIOB,GPIO_PIN_0);
+}
+void button_callback(void *btn)
+{
+    uint32_t btn_event_val;
+    btn_event_val = get_button_event((struct Button*)btn);
+
+    //printf("key1 press\n");
+}
+
+void main()
+{
+    button_init(&button1,read_button1_pin,0);
+    button_attach(&button1,SINGLE_CLICK,button_callback);
+    button_start(&button1);
+    while(1){
+        if(flag_5ms == 1){//5ms
+            flag_5ms = 0;
+            button_ticks();
+        }
+    }
+}
