@@ -117,34 +117,62 @@ int main()
 }
 
 
-============================================
+==============简单使用==============================
 ```
 #include "multi_button.h"
 
-struct Button button1;
+struct Button button1={.keyNo = BTN_KEY1};
+struct Button button2={.keyNo = BTN_KEY2};
+
 uint8_t read_button1_pin()
 {
     return gpio_input_bit_get(GPIOB,GPIO_PIN_0);
 }
-void button_callback(void *btn)
+uint8_t read_button2_pin()
 {
-    uint32_t btn_event_val;
-    btn_event_val = get_button_event((struct Button*)btn);
+    return gpio_input_bit_get(GPIOB,GPIO_PIN_2);
+}
+void button_callback(Button* btn)
+{
+    uint32_t btnEven;
+    btnEven = get_button_event((struct Button*)btn);
+    switch (btnEven)
+    {
+    case PRESS_DOWN:
+        DEBUG("%d down\n",btn->keyNo);
+		keyStatuReport(BTN_KEY1,KEY_DOWN);
+        break;
+    case LONG_PRESS_START:
+        DEBUG("%d long press\n",btn->keyNo);
+        break;
+    default:
+        break;
+    }
+}
 
-    //printf("key1 press\n");
+void multiButtonInit(void)
+{
+	button_init(&button1,read_button1_pin,0);
+    button_attach(&button1,PRESS_DOWN,button_callback);
+    button_attach(&button1,LONG_PRESS_START,button_callback);
+    button_start(&button1);
+
+	button_init(&button2,read_button2_pin,0);
+    button_attach(&button2,PRESS_DOWN,button_callback);
+    button_attach(&button2,LONG_PRESS_START,button_callback);
+    button_start(&button2);
 }
 
 void main()
 {
-    button_init(&button1,read_button1_pin,0);
-    button_attach(&button1,SINGLE_CLICK,button_callback);
-    button_start(&button1);
-    while(1){
-        if(flag_5ms == 1){//5ms
-            flag_5ms = 0;
-            button_ticks();
-        }
-    }
+	....
+	multiButtonInit();
+	while(1){
+		if(flag_10ms == 1){//10ms
+            		flag_10ms = 0;
+            		button_ticks();
+        	}
+	}
 }
 ```
 ![image](https://user-images.githubusercontent.com/7064806/127471830-cc6747f6-380e-4750-8237-5565ee9dbdd8.png)
