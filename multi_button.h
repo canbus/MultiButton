@@ -10,9 +10,9 @@
 #include "string.h"
 
 //According to your need to modify the constants.
-#define TICKS_INTERVAL    5	//ms
+#define TICKS_INTERVAL    10 //5	//ms
 #define DEBOUNCE_TICKS    3	//MAX 8
-#define SHORT_TICKS       (300 /TICKS_INTERVAL)
+#define SHORT_TICKS       (30 /TICKS_INTERVAL)//(300 /TICKS_INTERVAL)
 #define LONG_TICKS        (1000 /TICKS_INTERVAL)
 
 
@@ -39,6 +39,7 @@ typedef struct Button {
 	uint8_t  active_level : 1;
 	uint8_t  button_level : 1;
 	uint8_t  (*hal_button_Level)(void);
+	uint8_t	 keyNo;
 	BtnCallback  cb[number_of_event];
 	struct Button* next;
 }Button;
